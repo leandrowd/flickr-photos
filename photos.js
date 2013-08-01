@@ -61,12 +61,64 @@ var setupPhotos = (function ($) {
         return img;
     }
 
+    /* Favourites */
+    function favouriteToggleClassName(favouriteStar, reference){
+        favouriteStar.className = 'favourite ';
+        favouriteStar.className += (checkFavourite(reference) == -1) ?
+          "icon-heart-empty" : "icon-heart";
+    }
+
+    function favouriteStar (photo){
+        var favouriteStar = document.createElement('button');
+        favouriteStar.dataset.reference = photo.src;
+        favouriteStar.addEventListener('click', favouriteToggle, false);
+        favouriteToggleClassName(favouriteStar, photo.src);
+        return favouriteStar;
+    }
+
+    function favouriteToggle(e){
+        var favouriteList = getFavourites(),
+            reference = e.target.dataset.reference,
+            fav = checkFavourite(reference);
+
+        if(fav > -1){
+          //remove from list
+          favouriteList.splice(fav, 1);
+        }else{
+          //append in list
+          favouriteList.push(reference);
+        }
+        //update list
+        localStorage.setItem("Favourites", favouriteList);
+        //update class
+        favouriteToggleClassName(e.target, reference);
+    }
+
+    //returns index of favourite in list
+    function checkFavourite(reference){
+        var favouriteList = getFavourites(),
+            index = favouriteList.indexOf(reference);
+
+        return index;
+    }
+
+    //returns favourite list from localStorage
+    function getFavourites(){
+        var storage = localStorage.getItem("Favourites");
+        return storage ? storage.split(",") : [];
+    }
+
+    /* end of Favourites */
+
     function imageAppender (id) {
         var holder = document.getElementById(id);
         return function (img) {
             var elm = document.createElement('div');
+
             elm.className = 'photo';
             elm.appendChild(img);
+            elm.appendChild(favouriteStar(img));
+
             holder.appendChild(elm);
         };
     }

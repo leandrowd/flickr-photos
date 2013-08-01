@@ -1,3 +1,34 @@
+@font-face {
+    font-family: 'fontello';
+    src: url('font-awesome-light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    font-family: "fontello";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+
+    margin-left: .2em;
+
+    text-shadow: 0px 2px 0px #000;
+}
+
+.icon-heart-empty:before { content: '\e801'; } /* '' */
+.icon-heart:before { content: '\e800'; } /* '' */
+
 body {
     font: 16px/1 Helvetica, sans-serif;
 }
@@ -13,10 +44,22 @@ body {
     margin: 0 2px 2px 0;
     overflow: hidden;
     height: 160px;
+    position: relative;
 }
 
 .photo,
 .photo img {
     min-width: 160px;
     max-width: 240px;
+}
+
+.photo .favourite{
+    border: 0;
+    background: transparent;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
 }
