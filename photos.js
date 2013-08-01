@@ -27,6 +27,7 @@ var setupPhotos = (function ($) {
             callback(null, photos);
         };
 
+        window.loadingImages = true;
         $.ajax({
             url: 'http://api.flickr.com/services/feeds/photos_public.gne',
             data: {
@@ -123,15 +124,39 @@ var setupPhotos = (function ($) {
         };
     }
 
+
+    function checkScroll(e){
+      var d = document,
+        gap = 300,
+        scrollPosition = window.scrollY,
+        scrollHeight = d.body.scrollHeight,
+        stageHeight = d.documentElement.clientHeight,
+        targetPosition = scrollHeight - gap;
+      currentPosition = stageHeight + scrollPosition;
+
+      if(currentPosition > targetPosition && !this.loadingImages){
+        loadPhotos(this.tags.splice(0, 2), this.callback);
+      }
+    }
+
+    function loadPhotos(tags, callback){
+      loadAllPhotos(tags, max_per_tag, function (err, items) {
+        if (err) { return callback(err); }
+
+        each(items.map(renderPhoto), imageAppender('photos'));
+        callback();
+        window.loadingImages = false;
+      });
+    }
+
+    window.addEventListener('scroll', checkScroll, false);
+
     // ----
     
     var max_per_tag = 5;
     return function setup (tags, callback) {
-        loadAllPhotos(tags, max_per_tag, function (err, items) {
-            if (err) { return callback(err); }
-
-            each(items.map(renderPhoto), imageAppender('photos'));
-            callback();
-        });
+        this.tags = tags;
+        this.callback = callback;
+        loadPhotos(this.tags.splice(0, 5), callback);
     };
 }(jQuery));

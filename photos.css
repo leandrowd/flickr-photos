@@ -35,12 +35,14 @@ body {
 
 
 #photos {
-    float: left;
-    width: 100%;
+    margin: auto;
+    width: 60%;
+    text-align: center;
 }
 
 .photo {
-    float: left;
+    display: inline-block;
+    vertical-align: top;
     margin: 0 2px 2px 0;
     overflow: hidden;
     height: 160px;
